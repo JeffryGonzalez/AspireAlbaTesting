@@ -9,7 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Banking.AppHost", "Banking.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Banking.ServiceDefaults", "Banking.ServiceDefaults\Banking.ServiceDefaults.csproj", "{BFCEF5D5-7B59-40EE-BA28-8E3F46B49C0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banking.Tests", "Banking.Tests\Banking.Tests.csproj", "{A6590F2D-17BF-4142-A977-BC9FDB0EB2D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Banking.Tests", "Banking.Tests\Banking.Tests.csproj", "{A6590F2D-17BF-4142-A977-BC9FDB0EB2D8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{06463019-1841-4721-9617-857B98969D3A}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
