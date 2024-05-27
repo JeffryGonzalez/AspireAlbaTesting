@@ -1,5 +1,7 @@
 ﻿using Alba;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.Extensions.Hosting;
+using System.Net.NetworkInformation;
 
 
 namespace Banking.Tests;
@@ -14,15 +16,37 @@ public class AlbaFixture : IAsyncLifetime
     {
         var options = new DistributedApplicationOptions { AssemblyName = typeof(AlbaFixture).Assembly.FullName, DisableDashboard = true };
         var appBuilder = DistributedApplication.CreateBuilder(options);
-        Postgres = appBuilder.AddPostgres("db");
+        Postgres = appBuilder.AddPostgres("banking");
         _app = appBuilder.Build();
     }
     public async Task InitializeAsync()
     {
         await _app.StartAsync();
-        await Task.Delay(1000); // YUCK - Need a readiness check?
+      
         _postgresConnectionString = await Postgres.Resource.GetConnectionStringAsync() ?? throw new Exception("No Connection String");
 
+        var port = Postgres.Resource.PrimaryEndpoint.Port;
+        var retries = Enumerable.Range(1, 1000);
+        var ipProps = IPGlobalProperties.GetIPGlobalProperties();
+       
+        var portIsAssigned = false;
+        foreach (var retry in retries)
+        {
+            
+            var there = ipProps.GetActiveTcpListeners().Any(c => c.Port == port);
+            if (there)
+            {
+                portIsAssigned = true;
+                break;
+            }
+            await Task.Delay(1);
+            
+        }
+        if(!portIsAssigned)
+        {
+            throw new ArgumentOutOfRangeException("The Port isn't available");
+        }
+        await Task.Delay(1000);
         Host = await AlbaHost.For<global::Program>(config =>
         {
             config.UseSetting("ConnectionStrings:banking", _postgresConnectionString);
